@@ -8,9 +8,9 @@ pipeline {
           }
           stage('Upload to AWS') {
             steps{
-              ### withAWS(credentials:'aws-static', region: 'us-west-2') {
-              ###  s3Upload(file:'index.html', bucket:'staticwebpvera02', path:'index.html')
-              ###}
+              withAWS(credentials:'awscred', region: 'us-west-2') {
+              
+              }
               sh 'echo "Hello World!"'
             }
           }
