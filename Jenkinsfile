@@ -3,6 +3,7 @@ pipeline {
       stages {
           stage('Lint HTML') {
             steps{
+                sh '~/devopscapston/app/src/static'
                 sh 'tidy -q -e *.html'
             }
           }
