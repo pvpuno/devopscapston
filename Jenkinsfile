@@ -3,7 +3,7 @@ pipeline {
       stages {
           stage('Lint HTML') {
             steps{
-                sh '~/devopscapston_master@tmp/durable-f8cb27b1/script.sh'
+                sh 'cd ~/devopscapston_master@tmp/durable-f8cb27b1/script.sh'
                 sh 'tidy -q -e *.html'
             }
           }
