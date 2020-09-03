@@ -26,9 +26,9 @@ pipeline {
 
         stage('Lint HTML') {
             steps{
-                sh 'htmlErr= $(tidy -q -e app/src/static/*.html)'
+                sh 'htmlErr=$(tidy -q -e app/src/static/*.html)'
                 sh '''
-                    if [ "$htmlErr" -gt "0" ]; then
+                    if [ "$htmlErr" -gt "1" ]; then
                         echo "Errors found in HTML, please see below"
                         exit 1
                     else
