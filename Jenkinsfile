@@ -10,7 +10,7 @@ pipeline {
                             sh 'echo "Started Pipeline, Start linting Dockerfile"'
                             sh 'hadolint ./Dockerfile | tee -a hadolint_output.txt'
                             sh '''
-                                lintErrors=$(stat --printf="%s"  hadolint_output.txt)
+                                lintErrors=$(stat --printf='%s' hadolint_output.txt)
                                 if [ "$lintErrors" -gt "0" ]; then
                                     echo "Errors found in Dockerfile, please see below"
                                     cat hadolint_output.txt
