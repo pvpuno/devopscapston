@@ -26,9 +26,9 @@ pipeline {
 
         stage('Lint HTML') {
             steps{
-                sh '(tidy app/src/static/*.html || set status=0)'
+                sh '(tidy -q -e app/src/static/*.html || set status=0)'
                 sh '''
-                    echo "index.html was linted and no errors found."
+                    echo "index.html was linted and no errors found, May be some warnings."
                 '''
             }
         }
@@ -56,7 +56,7 @@ pipeline {
 
         stage('Upload Logs to AWS S3') {
             steps{
-                withAWS(credentials:'awscred', region: 'us-west-2') {
+                withAWS(credentials:'aws-cred', region: 'us-west-2') {
                     s3Upload(file:'hadolint_output.txt', bucket:'staticwebpvera02', path:'hadolint_output.txt')
                     sh 'echo "Hello World!"'
                 }
