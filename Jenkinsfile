@@ -26,7 +26,15 @@ pipeline {
 
         stage('Lint HTML') {
             steps{
-                sh 'tidy --show-warnings no --force-output yes -q -e app/src/static/*.html'
+                sh 'htmlErr= $(tidy -q -e app/src/static/*.html)'
+                sh '''
+                    if [ "$htmlErr" -gt "0" ]; then
+                        echo "Errors found in HTML, please see below"
+                        exit 1
+                    else
+                        echo "index.html was linted and no errors found."
+                    fi
+                '''
             }
         }
 
