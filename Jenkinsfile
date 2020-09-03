@@ -4,22 +4,24 @@ pipeline {
 
         stage('Lint Dockerfile') {
                 steps {
-                    docker.image('hadolint/hadolint:latest-alpine').inside()
-                    {
-                        sh 'echo "Started Pipeline, Start linting Dockerfile"'
-                        sh 'hadolint ./Dockerfile | tee -a hadolint_output.txt'
-                        sh '''
-                            lintErrors=$(stat --printf="%s"  hadolint_output.txt)
-                            if [ "$lintErrors" -gt "0" ]; then
-                                echo "Errors found in Dockerfile, please see below"
-                                cat hadolint_output.txt
-                                exit 1
-                            else
-                                echo "Dockerfile was linted and no errors found."
-                            fi
-                        '''
+                    script{
+                        docker.image('hadolint/hadolint:latest-alpine').inside()
+                        {
+                            sh 'echo "Started Pipeline, Start linting Dockerfile"'
+                            sh 'hadolint ./Dockerfile | tee -a hadolint_output.txt'
+                            sh '''
+                                lintErrors=$(stat --printf="%s"  hadolint_output.txt)
+                                if [ "$lintErrors" -gt "0" ]; then
+                                    echo "Errors found in Dockerfile, please see below"
+                                    cat hadolint_output.txt
+                                    exit 1
+                                else
+                                    echo "Dockerfile was linted and no errors found."
+                                fi
+                            '''
+                        }
                     }
-                }
+                }   
         }
 
         stage('Lint HTML') {
