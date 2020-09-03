@@ -82,7 +82,7 @@ pipeline {
               steps{
                   echo 'Checking Endpoint accesible'
                   withAWS(credentials: 'aws-cred', region: 'us-west-2') {
-                     sh "curl https://A0D79FD0A9EFF736A45F43688EFAE05D.gr7.us-west-2.eks.amazonaws.com:3000"
+                     sh "curl https://ab30ac6c6e858408fb9965480f142272-269061326.us-west-2.elb.amazonaws.com"
                   }
                }
         }
