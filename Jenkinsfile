@@ -24,11 +24,11 @@ pipeline {
                 }   
         }
 
-        #stage('Lint HTML') {
-        #    steps{
-        #        sh 'tidy -q -e *.html'
-        #    }
-        #}
+        stage('Lint HTML') {
+            steps{
+                sh 'tidy -q -e /app/src/static/*.html'
+            }
+        }
 
         stage('Security Scan') {
             steps { 
