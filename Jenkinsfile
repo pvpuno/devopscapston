@@ -16,7 +16,7 @@ pipeline {
                                     cat hadolint_output.txt
                                     exit 1
                                 else
-                                    echo "Dockerfile was linted and no errors found."
+                                    echo "Dockerfile was linted and no errors found." | tee -a hadolint_output.txt
                                 fi
                             '''
                         }
@@ -54,6 +54,21 @@ pipeline {
               }
         }
 
+        stage('Deploy Production') {
+              steps{
+                  echo 'Deploying to our infra'
+                  withAWS(credentials: 'aws-cred', region: 'us-west-2') {
+                      sh "aws eks --region us-west-2 update-kubeconfig --name prodcluster"
+                      sh "kubectl config use-context arn:aws:eks:us-west-2:368985348424:cluster/prodcluster"
+                      sh "kubectl apply -f deploy.yaml"
+                      sh "kubectl get nodes"
+                      sh "kubectl get deployments"
+                      sh "kubectl get pod -o wide"
+                      sh "kubectl get service/todoapp"
+                  }
+              }
+        }
+
         stage('Upload Logs to AWS S3') {
             steps{
                 withAWS(credentials:'aws-cred', region: 'us-west-2') {
@@ -61,6 +76,15 @@ pipeline {
                     sh 'echo "Hello World!"'
                 }
             }
+        }
+        
+        stage('Confirming App Status') {
+              steps{
+                  echo 'Checking Endpoint accesible'
+                  withAWS(credentials: 'aws-cred', region: 'us-west-2') {
+                     sh "curl https://A0D79FD0A9EFF736A45F43688EFAE05D.gr7.us-west-2.eks.amazonaws.com:3000"
+                  }
+               }
         }
     }
 }
