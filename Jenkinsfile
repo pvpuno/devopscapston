@@ -26,10 +26,9 @@ pipeline {
 
         stage('Lint HTML') {
             steps{
-                sh '-(tidy app/src/static/*.html || set status=0)'
+                sh '(tidy app/src/static/*.html || set status=0)'
                 sh '''
                     echo "index.html was linted and no errors found."
-                    fi
                 '''
             }
         }
