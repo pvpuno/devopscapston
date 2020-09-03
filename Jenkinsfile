@@ -26,7 +26,7 @@ pipeline {
 
         stage('Lint HTML') {
             steps{
-                sh 'tidy -q -e --show-warnings no app/src/static/*.html'
+                sh 'tidy -e --show-warnings no app/src/static/*.html'
             }
         }
 
