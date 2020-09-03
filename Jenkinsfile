@@ -26,7 +26,7 @@ pipeline {
 
         stage('Lint HTML') {
             steps{
-                sh 'tidy -q -e /app/src/static/*.html'
+                sh 'tidy -q -e app/src/static/*.html'
             }
         }
 
