@@ -3,8 +3,7 @@ pipeline {
       stages {
           stage('Lint HTML') {
             steps{
-                sh 'sudo cd ~/devopscapston/app/src/static'
-                sh 'tidy -q -e *.html'
+                sh 'tidy -q -e ~/devopscapston/app/src/static/*.html'
             }
           }
           stage('Upload to AWS') {
