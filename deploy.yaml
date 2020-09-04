@@ -21,7 +21,7 @@ spec:
         app: capstone-todoapp
     spec:
       containers:
-        - image: pvpuno/todoapp
+        - image: pvpuno/101-todo-app
           imagePullPolicy: Always
           name: capstone-todoapp
           ports:
