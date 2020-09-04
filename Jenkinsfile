@@ -102,7 +102,7 @@ pipeline {
 
         stage("Cleaning up") {
               steps{
-                    sh "docker system prune"
+                    sh "docker system prune -a -f"
                     echo 'Images/System registry clean!'
               }
         }
