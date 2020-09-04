@@ -1,8 +1,8 @@
 FROM node:10-alpine
 WORKDIR /app
-COPY . .
+COPY /app /app
 EXPOSE 3000
-RUN yarn install
+RUN yarn install --production
 CMD ["node", "/app/src/index.js"]
 
 ### OjO esto corre en el puerto 3000 

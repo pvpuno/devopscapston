@@ -33,12 +33,6 @@ pipeline {
             }
         }
 
-        stage('Security Scan') {
-            steps { 
-                aquaMicroscanner imageName: 'node:10-alpine', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
-            }
-        }
-
         stage('Build Docker Image') {
               steps {
                 sh 'docker build -t todoapp .'
@@ -52,6 +46,12 @@ pipeline {
                       sh 'docker push pvpuno/todoapp'
                   }
               }
+        }
+
+        stage('Security Scan') {
+            steps { 
+                aquaMicroscanner imageName: 'pvpuno/todoapp', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
+            }
         }
 
         stage('Deploy Production') {
