@@ -36,6 +36,7 @@ pipeline {
         stage('Build Docker Image') {
               steps {
                 sh 'docker build -t todoapp .'
+                echo 'WebApp image successfully created'
             }
         }
 
@@ -45,12 +46,14 @@ pipeline {
                       sh "docker tag todoapp pvpuno/todoapp"
                       sh 'docker push pvpuno/todoapp'
                   }
+                  echo 'WebApp image successfully pushed to DockerHub!'
               }
         }
 
         stage('Security Scan') {
             steps { 
                 aquaMicroscanner imageName: 'pvpuno/todoapp', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
+                echo 'WebApp container scanned and NO security vulnerabilities found!'
             }
         }
 
@@ -66,6 +69,7 @@ pipeline {
                       sh "kubectl get pod -o wide"
                       sh "kubectl get service/capstone-todoapp"
                   }
+                  echo 'Web App deployed succesfully!'
               }
         }
 
@@ -73,7 +77,7 @@ pipeline {
             steps{
                 withAWS(credentials:'aws-cred', region: 'us-west-2') {
                     s3Upload(file:'hadolint_output.txt', bucket:'staticwebpvera02', path:'hadolint_output.txt')
-                    sh 'echo "Hello World!"'
+                    sh 'echo "You can find Docker linting result at S3 bucket"'
                 }
             }
         }
@@ -85,6 +89,22 @@ pipeline {
                      sh "curl http://ab30ac6c6e858408fb9965480f142272-269061326.us-west-2.elb.amazonaws.com:31000"
                   }
                }
+        }
+
+        stage('Checking rollout status') {
+              steps{
+                  echo 'Checking rollout status...'
+                  withAWS(credentials: 'aws-cred', region: 'us-west-2') {
+                     sh "kubectl rollout status deployments/capstone-todoapp"
+                  }
+              }
+        }
+
+        stage("Cleaning up") {
+              steps{
+                    sh "docker system prune"
+                    echo 'Images/System registry clean!'
+              }
         }
     }
 }
