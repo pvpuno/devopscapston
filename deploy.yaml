@@ -41,9 +41,8 @@ spec:
   ports:
     - name: http
       protocol: TCP
-      port: 3000
+      port: 31000
       targetPort: 3000
-      nodePort: 3000
     - name: https
       port: 443
       protocol: TCP
